@@ -1,0 +1,50 @@
+# Versi file compose, 3.8 adalah versi yang modern dan stabil.
+version: '3.8'
+
+# Blok 'services' adalah tempat kita mendefinisikan semua kontainer.
+services:
+  # Layanan untuk database PostgreSQL
+  postgres:
+    image: postgres:13 # Menggunakan image postgres versi 13
+    container_name: openmusic-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${PGUSER} # Mengambil variabel dari file .env
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data # Menyimpan data database secara persisten
+    networks:
+      - openmusic-net
+
+  # Layanan untuk message broker RabbitMQ
+  rabbitmq:
+    image: rabbitmq:3-management # Image dengan dashboard manajemen
+    container_name: openmusic-rabbitmq
+    restart: always
+    ports:
+      - '5672:5672' # Port untuk aplikasi
+      - '15672:15672' # Port untuk dashboard web
+    networks:
+      - openmusic-net
+
+  # Layanan untuk caching Redis
+  redis:
+    image: redis:latest # Image redis terbaru
+    container_name: openmusic-redis
+    restart: always
+    ports:
+      - '6379:6379'
+    networks:
+      - openmusic-net
+
+# Mendefinisikan volume untuk persistensi data
+volumes:
+  postgres-data:
+
+# Mendefinisikan jaringan agar semua kontainer bisa berkomunikasi
+networks:
+  openmusic-net:
+    driver: bridge

@@ -3,6 +3,10 @@ import {
   getAlbumByIdHandler,
   editAlbumByIdHandler,
   deleteAlbumByIdHandler,
+  postUploadCoverHandler,
+  postAlbumLikeHandler,
+  deleteAlbumLikeHandler,
+  getAlbumLikesHandler,
 } from '../handlers/albums.js';
 import { AlbumPayloadSchema } from '../validator/albums/schema.js';
 
@@ -52,6 +56,40 @@ const routes = [
     method: 'DELETE',
     path: '/albums/{id}',
     handler: deleteAlbumByIdHandler,
+  },
+  {
+    method: 'POST',
+    path: '/albums/{id}/covers',
+    handler: postUploadCoverHandler,
+    options: {
+      payload: {
+        allow: 'multipart/form-data',
+        multipart: true,
+        output: 'stream',
+        maxBytes: 512000,
+      },
+    },
+  },
+  {
+    method: 'POST',
+    path: '/albums/{id}/likes',
+    handler: postAlbumLikeHandler,
+    options: {
+      auth: 'musicapp_jwt',
+    },
+  },
+  {
+    method: 'DELETE',
+    path: '/albums/{id}/likes',
+    handler: deleteAlbumLikeHandler,
+    options: {
+      auth: 'musicapp_jwt',
+    },
+  },
+  {
+    method: 'GET',
+    path: '/albums/{id}/likes',
+    handler: getAlbumLikesHandler,
   },
 ];
 
