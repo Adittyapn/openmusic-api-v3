@@ -1,3 +1,4 @@
+import config from '../utils/config.js';
 import redis from 'redis';
 
 /**
@@ -6,7 +7,7 @@ import redis from 'redis';
 class CacheService {
   constructor() {
     this._client = redis.createClient({
-      url: process.env.REDIS_SERVER,
+      url: config.redis.host,
     });
 
     this._client.on('error', (error) => {

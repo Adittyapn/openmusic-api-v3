@@ -1,3 +1,4 @@
+import config from '../utils/config.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import AlbumService from '../services/AlbumService.js';
@@ -108,7 +109,7 @@ const postUploadCoverHandler = async (request, h) => {
 
     // URL untuk sampul harus relatif terhadap path yang disajikan oleh server
     const filename = await storageService.writeFile(cover, cover.hapi);
-    const coverUrl = `http://${process.env.HOST}:${process.env.PORT}/albums/covers/${filename}`;
+    const coverUrl = `http://${config.app.host}:${config.app.port}/albums/covers/${filename}`;
 
     await albumService.addCoverToAlbum(albumId, coverUrl);
 

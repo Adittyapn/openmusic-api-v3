@@ -1,11 +1,11 @@
-import 'dotenv/config';
+import config from './utils/config.js';
 import amqplib from 'amqplib';
 import nodemailer from 'nodemailer';
 import PlaylistsService from './src/services/PlaylistsService.js';
 
 const init = async () => {
   const playlistsService = new PlaylistsService();
-  const connection = await amqplib.connect(process.env.RABBITMQ_SERVER);
+  const connection = await amqplib.connect(config.rabbitMq.server);
   const channel = await connection.createChannel();
 
   const queue = 'export:playlists';
@@ -36,12 +36,12 @@ const init = async () => {
         };
 
         const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST,
-          port: process.env.SMTP_PORT,
+          host: config.smtp.host,
+          port: config.smtp.port,
           secure: true,
           auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASSWORD,
+            user: config.smtp.user,
+            pass: config.smtp.pass,
           },
         });
 
