@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 export const up = (pgm) => {
   pgm.createTable('user_album_likes', {
     id: { type: 'VARCHAR(50)', primaryKey: true },

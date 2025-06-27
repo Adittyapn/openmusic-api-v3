@@ -1,5 +1,7 @@
 import { nanoid } from 'nanoid';
 import pool from '../utils/database.js';
+import NotFoundError from '../exceptions/NotFoundError.js'; // Add this
+import AuthorizationError from '../exceptions/AuthorizationError.js'; // Add this
 
 class PlaylistsService {
   async addPlaylist({ name, owner }) {
@@ -54,10 +56,12 @@ class PlaylistsService {
       values: [id],
     };
 
-    const { rowCount } = await this._pool.query(query);
+    // Perbaiki this._pool menjadi pool
+    const result = await pool.query(query);
 
-    if (!rowCount) {
-      throw new Error('Playlist gagal dihapus. Id tidak ditemukan');
+    // Gunakan result.rowCount dan lemparkan NotFoundError
+    if (!result.rowCount) {
+      throw new NotFoundError('Playlist gagal dihapus. Id tidak ditemukan');
     }
   }
 
@@ -90,7 +94,7 @@ class PlaylistsService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Playlist tidak ditemukan');
+      throw new NotFoundError('Playlist tidak ditemukan');
     }
 
     const playlist = {
@@ -99,10 +103,10 @@ class PlaylistsService {
       username: result.rows[0].username,
       songs: result.rows[0].song_id
         ? result.rows.map((row) => ({
-          id: row.song_id,
-          title: row.title,
-          performer: row.performer,
-        }))
+            id: row.song_id,
+            title: row.title,
+            performer: row.performer,
+          }))
         : [],
     };
 
@@ -118,7 +122,7 @@ class PlaylistsService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Lagu gagal dihapus dari playlist');
+      throw new NotFoundError('Lagu gagal dihapus dari playlist');
     }
   }
 
@@ -137,7 +141,7 @@ class PlaylistsService {
     const playlist = result.rows[0];
 
     if (playlist.owner !== owner) {
-      throw new Error('Anda tidak berhak mengakses resource ini');
+      throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
     }
   }
 
@@ -146,7 +150,7 @@ class PlaylistsService {
       await this.verifyPlaylistOwner(playlistId, userId);
     } catch (error) {
       if (error.message === 'Playlist tidak ditemukan') {
-        throw error;
+        throw new NotFoundError('Playlist tidak ditemukan');
       }
 
       try {
@@ -156,7 +160,9 @@ class PlaylistsService {
         };
         const result = await pool.query(collaborationQuery);
         if (!result.rows.length) {
-          throw new Error('Anda tidak berhak mengakses resource ini');
+          throw new AuthorizationError(
+            'Anda tidak berhak mengakses resource ini'
+          );
         }
       } catch (e) {
         throw error;

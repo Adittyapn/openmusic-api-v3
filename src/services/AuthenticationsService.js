@@ -1,4 +1,5 @@
 import pool from '../utils/database.js';
+import ClientError from '../exceptions/ClientError.js';
 
 class AuthenticationsService {
   async addRefreshToken(token) {
@@ -19,7 +20,7 @@ class AuthenticationsService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Refresh token tidak valid');
+      throw new ClientError('Refresh token tidak valid');
     }
   }
 

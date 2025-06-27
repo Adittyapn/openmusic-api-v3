@@ -66,7 +66,7 @@ const routes = [
         allow: 'multipart/form-data',
         multipart: true,
         output: 'stream',
-        maxBytes: 512000,
+        maxBytes: 512000, // Hapi akan otomatis menolak file > 512KB dengan error 413
       },
     },
   },

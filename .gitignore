@@ -12,8 +12,9 @@ yarn-error.log*
 .env.production.local
 
 # Uploaded files
-uploads/images/*
-!uploads/images/.gitkeep
+src/uploads/images/*
+!src/uploads/images/.gitkeep
+
 
 # Runtime data
 pids

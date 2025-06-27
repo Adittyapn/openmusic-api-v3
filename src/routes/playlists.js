@@ -46,6 +46,17 @@ const routes = [
     handler: deletePlaylistHandler,
     options: {
       auth: 'musicapp_jwt',
+      validate: {
+        payload: PlaylistPayloadSchema,
+        failAction: (request, h, error) => {
+          const response = h.response({
+            status: 'fail',
+            message: error.details[0].message,
+          });
+          response.code(400);
+          return response.takeover();
+        },
+      },
     },
   },
   {

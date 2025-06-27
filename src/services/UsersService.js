@@ -1,6 +1,9 @@
 import bcrypt from 'bcrypt';
 import { nanoid } from 'nanoid';
 import pool from '../utils/database.js';
+import ClientError from '../exceptions/ClientError.js';
+import NotFoundError from '../exceptions/NotFoundError.js'; // Add this
+import AuthenticationError from '../exceptions/AuthenticationError.js'; // Add this
 
 class UsersService {
   async addUser({ username, password, fullname }) {
@@ -32,7 +35,10 @@ class UsersService {
     const result = await pool.query(query);
 
     if (result.rows.length > 0) {
-      throw new Error('Gagal menambahkan user. Username sudah digunakan.');
+      // Ganti new Error menjadi new ClientError
+      throw new ClientError(
+        'Gagal menambahkan user. Username sudah digunakan.'
+      );
     }
   }
 
@@ -45,7 +51,7 @@ class UsersService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('User tidak ditemukan');
+      throw new NotFoundError('User tidak ditemukan');
     }
 
     return result.rows[0];
@@ -60,7 +66,7 @@ class UsersService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Kredensial yang Anda berikan salah');
+      throw new AuthenticationError('Kredensial yang Anda berikan salah');
     }
 
     const { id, password: hashedPassword } = result.rows[0];
@@ -68,7 +74,7 @@ class UsersService {
     const match = await bcrypt.compare(password, hashedPassword);
 
     if (!match) {
-      throw new Error('Kredensial yang Anda berikan salah');
+      throw new AuthenticationError('Kredensial yang Anda berikan salah');
     }
 
     return id;

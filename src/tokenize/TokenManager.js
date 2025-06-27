@@ -1,5 +1,6 @@
 import config from '../utils/config.js';
 import Jwt from '@hapi/jwt';
+import ClientError from '../exceptions/ClientError.js';
 
 const TokenManager = {
   generateAccessToken: (payload) =>
@@ -13,7 +14,7 @@ const TokenManager = {
       const { payload } = artifacts.decoded;
       return payload;
     } catch (error) {
-      throw new Error('Refresh token tidak valid');
+      throw new ClientError('Refresh token tidak valid');
     }
   },
 };

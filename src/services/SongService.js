@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import pool from '../utils/database.js';
+import NotFoundError from '../exceptions/NotFoundError.js';
 
 class SongService {
   async addSong({ title, year, genre, performer, duration, albumId }) {
@@ -52,7 +53,7 @@ class SongService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Lagu tidak ditemukan');
+      throw new NotFoundError('Lagu tidak ditemukan');
     }
 
     const song = result.rows[0];
@@ -77,7 +78,7 @@ class SongService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Gagal memperbarui lagu. Id tidak ditemukan');
+      throw new NotFoundError('Gagal memperbarui lagu. Id tidak ditemukan');
     }
   }
 
@@ -90,7 +91,7 @@ class SongService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Lagu gagal dihapus. Id tidak ditemukan');
+      throw new NotFoundError('Lagu gagal dihapus. Id tidak ditemukan');
     }
   }
 }

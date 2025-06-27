@@ -1,5 +1,7 @@
 import { nanoid } from 'nanoid';
 import pool from '../utils/database.js';
+import NotFoundError from '../exceptions/NotFoundError.js'; // Add this
+import ClientError from '../exceptions/ClientError.js';
 
 class AlbumService {
   async addAlbum({ name, year }) {
@@ -27,7 +29,7 @@ class AlbumService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Album tidak ditemukan');
+      throw new NotFoundError('Album tidak ditemukan');
     }
 
     return result.rows[0];
@@ -42,7 +44,7 @@ class AlbumService {
     const albumResult = await pool.query(albumQuery);
 
     if (!albumResult.rows.length) {
-      throw new Error('Album tidak ditemukan');
+      throw new NotFoundError('Album tidak ditemukan');
     }
 
     // Query untuk mendapatkan lagu-lagu dalam album
@@ -72,7 +74,7 @@ class AlbumService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Gagal memperbarui album. Id tidak ditemukan');
+      throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan');
     }
   }
 
@@ -85,7 +87,7 @@ class AlbumService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Album gagal dihapus. Id tidak ditemukan');
+      throw new NotFoundError('Album gagal dihapus. Id tidak ditemukan');
     }
   }
 
@@ -97,12 +99,14 @@ class AlbumService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Gagal menambahkan sampul. Id album tidak ditemukan.');
+      throw new NotFoundError(
+        'Gagal menambahkan sampul. Id album tidak ditemukan.'
+      );
     }
   }
 
   async addAlbumLike(albumId, userId) {
-    await this.getAlbumById(albumId); // Verifikasi album ada
+    await this.getAlbumById(albumId);
 
     const checkQuery = {
       text: 'SELECT id FROM user_album_likes WHERE user_id = $1 AND album_id = $2',
@@ -111,7 +115,7 @@ class AlbumService {
     const checkResult = await pool.query(checkQuery);
 
     if (checkResult.rows.length > 0) {
-      throw new Error('Album sudah Anda sukai');
+      throw new ClientError('Album sudah Anda sukai');
     }
 
     const id = `like-${nanoid(16)}`;
@@ -130,7 +134,7 @@ class AlbumService {
     const result = await pool.query(query);
 
     if (!result.rows.length) {
-      throw new Error('Gagal batal menyukai. Like tidak ditemukan.');
+      throw new NotFoundError('Gagal batal menyukai. Like tidak ditemukan.');
     }
   }
 
