@@ -1,4 +1,4 @@
-import config from './utils/config.js'; // Import config
+import config from './utils/config.js';
 import Hapi from '@hapi/hapi';
 import Jwt from '@hapi/jwt';
 import Inert from '@hapi/inert';
@@ -15,7 +15,6 @@ import playlistRoutes from './routes/playlists.js';
 import collaborationRoutes from './routes/collaborations.js';
 import exportRoutes from './routes/exports.js';
 
-// Membuat __dirname yang andal untuk ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -50,7 +49,7 @@ const init = async () => {
     }),
   });
 
-  // Daftarkan semua rute dari aplikasi
+  // Daftarkan semua rute dari api
   server.route(albumRoutes);
   server.route(songRoutes);
   server.route(userRoutes);
@@ -59,13 +58,12 @@ const init = async () => {
   server.route(collaborationRoutes);
   server.route(exportRoutes);
 
-  // Rute untuk menyajikan file sampul album dari direktori yang benar
   server.route({
     method: 'GET',
     path: '/albums/covers/{param*}',
     handler: {
       directory: {
-        path: path.join(__dirname, 'uploads/images'), // <-- Gunakan path.join
+        path: path.join(__dirname, 'uploads/images'),
       },
     },
   });

@@ -1,5 +1,3 @@
-// src/handlers/exports.js
-
 import PlaylistsService from '../services/PlaylistsService.js';
 import ProducerService from '../services/ProducerService.js';
 

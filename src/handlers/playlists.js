@@ -1,5 +1,3 @@
-// src/handlers/playlists.js
-
 import PlaylistsService from '../services/PlaylistsService.js';
 import SongService from '../services/SongService.js';
 import PlaylistSongActivitiesService from '../services/PlaylistSongActivitiesService.js';

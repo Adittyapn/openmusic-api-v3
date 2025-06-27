@@ -1,5 +1,3 @@
-// src/handlers/users.js
-
 import UsersService from '../services/UsersService.js';
 
 const usersService = new UsersService();

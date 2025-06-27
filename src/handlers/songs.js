@@ -1,5 +1,3 @@
-// src/handlers/songs.js
-
 import SongService from '../services/SongService.js';
 
 const songService = new SongService();

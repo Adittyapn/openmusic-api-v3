@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import pool from '../utils/database.js';
-import NotFoundError from '../exceptions/NotFoundError.js'; // Add this
+import NotFoundError from '../exceptions/NotFoundError.js';
 import ClientError from '../exceptions/ClientError.js';
 
 class AlbumService {
@@ -55,7 +55,6 @@ class AlbumService {
     const songsResult = await pool.query(songsQuery);
 
     const album = albumResult.rows[0];
-    // Rename cover_url menjadi coverUrl
     album.coverUrl = album.cover_url;
     delete album.cover_url;
 

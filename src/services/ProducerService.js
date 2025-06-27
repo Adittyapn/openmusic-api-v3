@@ -1,9 +1,6 @@
 import config from '../utils/config.js';
 import amqplib from 'amqplib';
 
-/**
- * Service untuk mengirimkan pesan ke message broker RabbitMQ.
- */
 const ProducerService = {
   sendMessage: async (queue, message) => {
     const connection = await amqplib.connect(config.rabbitMq.server);

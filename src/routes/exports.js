@@ -11,7 +11,6 @@ const routes = [
       validate: {
         payload: ExportPlaylistPayloadSchema,
         failAction: (request, h, error) => {
-          // This failAction can be removed if you implement global error handling
           const response = h.response({
             status: 'fail',
             message: error.details[0].message,

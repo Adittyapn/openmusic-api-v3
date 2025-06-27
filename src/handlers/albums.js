@@ -1,5 +1,3 @@
-// src/handlers/albums.js
-
 import path from 'path';
 import { fileURLToPath } from 'url';
 import AlbumService from '../services/AlbumService.js';

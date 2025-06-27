@@ -56,10 +56,8 @@ class PlaylistsService {
       values: [id],
     };
 
-    // Perbaiki this._pool menjadi pool
     const result = await pool.query(query);
 
-    // Gunakan result.rowCount dan lemparkan NotFoundError
     if (!result.rowCount) {
       throw new NotFoundError('Playlist gagal dihapus. Id tidak ditemukan');
     }

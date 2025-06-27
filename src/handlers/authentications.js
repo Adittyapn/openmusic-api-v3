@@ -1,5 +1,3 @@
-// src/handlers/authentications.js
-
 import AuthenticationsService from '../services/AuthenticationsService.js';
 import UsersService from '../services/UsersService.js';
 import TokenManager from '../tokenize/TokenManager.js';

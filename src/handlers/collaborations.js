@@ -1,5 +1,3 @@
-// src/handlers/collaborations.js
-
 import CollaborationsService from '../services/CollaborationsService.js';
 import PlaylistsService from '../services/PlaylistsService.js';
 import UsersService from '../services/UsersService.js';
