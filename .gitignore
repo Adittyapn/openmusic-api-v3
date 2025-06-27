@@ -11,6 +11,10 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# Uploaded files
+uploads/images/*
+!uploads/images/.gitkeep
+
 # Runtime data
 pids
 *.pid
